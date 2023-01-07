@@ -12,6 +12,7 @@ import com.crossbox.fitnessclub.security.jwt.JwtProvider;
 import com.crossbox.fitnessclub.security.service.RolService;
 import com.crossbox.fitnessclub.security.service.UsuarioService;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost4200")
+@CrossOrigin(origins = "http://localhost:4200")
 
 public class AuthController {
     @Autowired
@@ -144,6 +146,23 @@ public class AuthController {
         
         return new ResponseEntity(new Mensaje("Objeto actualizado correctamente"), HttpStatus.OK);
     }
+    
+    //agregados recien
+     @GetMapping("/lista")
+    public ResponseEntity<List<Usuario>> list() {
+        List<Usuario> list = usuarioService.list();
+        return new ResponseEntity(list, HttpStatus.OK);
+    }
+    
+       @GetMapping("/detail/{id}")
+    public ResponseEntity<Usuario> geyById(@PathVariable("id") int id){
+        if(!usuarioService.existsById(id)){
+            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.BAD_REQUEST);
+        }
+        Usuario usuario = usuarioService.getOne(id).get();
+        return new ResponseEntity(usuario,HttpStatus.OK);
+    }
+   
 }
 
 

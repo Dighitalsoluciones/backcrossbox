@@ -3,6 +3,7 @@ package com.crossbox.fitnessclub.security.service;
 
 import com.crossbox.fitnessclub.security.entity.Usuario;
 import com.crossbox.fitnessclub.security.repository.iUsuarioRepository;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,11 @@ public class UsuarioService {
      public boolean existsById(int id){
         return iusuarioRepository.existsById(id);
     }
+     
+    //estos son los dos agregados
+    public List<Usuario> list(){
+        return iusuarioRepository.findAll();
+    }
+    
+   
 }
