@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,10 +99,10 @@ public class AuthController {
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
     
-       @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody NuevoUsuario nuevousuario){
-        if(!usuarioService.existsById(id)){
-            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);      
+       @PutMapping("/update/{nombreUsuario}")
+    public ResponseEntity<?> update(@PathVariable("nombreUsuario") String nombreUsuario, @RequestBody NuevoUsuario nuevousuario){
+        if(!usuarioService.existsByNombreUsuario(nombreUsuario)){
+            return new ResponseEntity(new Mensaje("Usuario inexistente"), HttpStatus.NOT_FOUND);      
        }
          if(StringUtils.isBlank(nuevousuario.getNombre())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
@@ -123,7 +124,7 @@ public class AuthController {
         }
         
                 
-        Usuario usuario = usuarioService.getOne(id).get();
+        Usuario usuario = usuarioService.getByNombreUsuario(nombreUsuario).get();
         
         usuario.setNombre(nuevousuario.getNombre());
         usuario.setApellido(nuevousuario.getApellido());
@@ -144,7 +145,7 @@ public class AuthController {
                
         usuarioService.save(usuario);
         
-        return new ResponseEntity(new Mensaje("Objeto actualizado correctamente"), HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
     }
     
     //agregados recien
@@ -155,14 +156,31 @@ public class AuthController {
     }
     
        @GetMapping("/detail/{id}")
-    public ResponseEntity<Usuario> geyById(@PathVariable("id") int id){
+    public ResponseEntity<Usuario> getById(@PathVariable("id") int id){
         if(!usuarioService.existsById(id)){
             return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.BAD_REQUEST);
         }
         Usuario usuario = usuarioService.getOne(id).get();
         return new ResponseEntity(usuario,HttpStatus.OK);
     }
+    
+    @GetMapping("/detailname/{nombreUsuario}")
+    public ResponseEntity<Usuario> getByNombreUsuario(@PathVariable("nombreUsuario") String nombreUsuario){
+        if(!usuarioService.existsByNombreUsuario(nombreUsuario))
+            return new ResponseEntity(new Mensaje("no existe"), HttpStatus.NOT_FOUND);
+        Usuario usuario = usuarioService.getByNombreUsuario(nombreUsuario).get();
+        return new ResponseEntity(usuario, HttpStatus.OK);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
+        if (!usuarioService.existsById(id)) {
+            return new ResponseEntity(new Mensaje("Id Inexistente"), HttpStatus.NOT_FOUND);
+        }
+        usuarioService.delete(id);
+        return new ResponseEntity(new Mensaje("Usuario eliminado correctamente"), HttpStatus.OK);
+    }
    
+    
 }
 
 

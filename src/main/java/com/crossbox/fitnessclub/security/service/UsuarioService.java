@@ -16,13 +16,7 @@ public class UsuarioService {
     @Autowired
     iUsuarioRepository iusuarioRepository;
     
-    public Optional<Usuario> getByNombreUsuario(String nombreUsuario){
-        return iusuarioRepository.findByNombreUsuario(nombreUsuario);
-    }
-    
-    public boolean existsByNombreUsuario(String nombreUsuario){
-        return iusuarioRepository.existsByNombreUsuario(nombreUsuario);
-    }
+     
     
     public boolean existsByEmail(String email){
         return iusuarioRepository.existsByEmail(email);
@@ -34,6 +28,11 @@ public class UsuarioService {
     public Optional<Usuario> getOne(int id){
         return iusuarioRepository.findById(id);
     }
+    //probando
+     public Optional<Usuario> getOneOptional(String nombreUsuario){
+        return iusuarioRepository.findByNombreUsuario(nombreUsuario);
+    }
+    
      public boolean existsById(int id){
         return iusuarioRepository.existsById(id);
     }
@@ -43,5 +42,15 @@ public class UsuarioService {
         return iusuarioRepository.findAll();
     }
     
+     public Optional<Usuario> getByNombreUsuario(String nombreUsuario){
+        return iusuarioRepository.findByNombreUsuario(nombreUsuario);
+    }
+     
+      public boolean existsByNombreUsuario(String nombreUsuario){
+        return iusuarioRepository.existsByNombreUsuario(nombreUsuario);
+    }
+      public void delete(int id){
+        iusuarioRepository.deleteById(id);
+    }
    
 }

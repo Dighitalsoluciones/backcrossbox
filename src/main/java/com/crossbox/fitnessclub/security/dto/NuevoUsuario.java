@@ -33,5 +33,8 @@ public class NuevoUsuario {
     private int clasesTomadas;
     private int ClasesRestantes;
     
+    //constructor
+    
+    
        
 }
