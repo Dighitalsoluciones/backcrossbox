@@ -2,6 +2,7 @@
 package com.crossbox.fitnessclub.security.controller;
 
 
+import com.crossbox.fitnessclub.security.dto.EditUsuarioDto;
 import com.crossbox.fitnessclub.security.dto.JwtDto;
 import com.crossbox.fitnessclub.security.dto.LoginUsuario;
 import com.crossbox.fitnessclub.security.dto.NuevoUsuario;
@@ -11,12 +12,18 @@ import com.crossbox.fitnessclub.security.enums.RolNombre;
 import com.crossbox.fitnessclub.security.jwt.JwtProvider;
 import com.crossbox.fitnessclub.security.service.RolService;
 import com.crossbox.fitnessclub.security.service.UsuarioService;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -99,48 +106,55 @@ public class AuthController {
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
     
-       @PutMapping("/update/{nombreUsuario}")
-    public ResponseEntity<?> update(@PathVariable("nombreUsuario") String nombreUsuario, @RequestBody NuevoUsuario nuevousuario){
-        if(!usuarioService.existsByNombreUsuario(nombreUsuario)){
-            return new ResponseEntity(new Mensaje("Usuario inexistente"), HttpStatus.NOT_FOUND);      
-       }
-         if(StringUtils.isBlank(nuevousuario.getNombre())){
+    
+        
+        @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody EditUsuarioDto editusuariodto){
+        if(!usuarioService.existsById(id)){
+            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);
+        }
+        if(usuarioService.existsByNombreUsuario(editusuariodto.getNombreUsuario()) && usuarioService.
+                getByNombreUsuario(editusuariodto.getNombreUsuario()).get().getId() != id){
+        return new ResponseEntity(new Mensaje("Nombre existente"), HttpStatus.BAD_REQUEST);
+        }
+        
+         if(StringUtils.isBlank(editusuariodto.getNombre())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
-          if(StringUtils.isBlank(nuevousuario.getApellido())){
+          if(StringUtils.isBlank(editusuariodto.getApellido())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
-       if(StringUtils.isBlank(nuevousuario.getDni())){
+       if(StringUtils.isBlank(editusuariodto.getDni())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
-        if(StringUtils.isBlank(nuevousuario.getNombreUsuario())){
+        if(StringUtils.isBlank(editusuariodto.getNombreUsuario())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
-        if(StringUtils.isBlank(nuevousuario.getEmail())){
+        if(StringUtils.isBlank(editusuariodto.getEmail())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
-        if(StringUtils.isBlank(nuevousuario.getPassword())){
+        if(StringUtils.isBlank(editusuariodto.getPassword())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
         
                 
-        Usuario usuario = usuarioService.getByNombreUsuario(nombreUsuario).get();
+        Usuario usuario = usuarioService.getOne(id).get();
         
-        usuario.setNombre(nuevousuario.getNombre());
-        usuario.setApellido(nuevousuario.getApellido());
-        usuario.setDni(nuevousuario.getDni());
-        usuario.setDireccion(nuevousuario.getDireccion());
-        usuario.setLocalidad(nuevousuario.getLocalidad());
-        usuario.setTelefono(nuevousuario.getTelefono());
-        usuario.setFotoPerfil(nuevousuario.getFotoPerfil());
-        usuario.setNombreUsuario(nuevousuario.getNombreUsuario());
-        usuario.setEmail(nuevousuario.getEmail());
-        usuario.setPassword(nuevousuario.getPassword());
+        usuario.setNombre(editusuariodto.getNombre());
+        usuario.setApellido(editusuariodto.getApellido());
+        usuario.setDni(editusuariodto.getDni());
+        usuario.setDireccion(editusuariodto.getDireccion());
+        usuario.setLocalidad(editusuariodto.getLocalidad());
+        usuario.setTelefono(editusuariodto.getTelefono());
+        usuario.setFotoPerfil(editusuariodto.getFotoPerfil());
+        usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
+        usuario.setEmail(editusuariodto.getEmail());
+        usuario.setPassword(editusuariodto.getPassword());
        
-        usuario.setSuscripcionActual(nuevousuario.getSuscripcionActual());
-        usuario.setFechaActualSus(nuevousuario.getFechaActualSus());
-        usuario.setClasesTomadas(nuevousuario.getClasesTomadas());
-        usuario.setClasesRestantes(nuevousuario.getClasesRestantes());
+        usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
+        usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
+        usuario.setClasesTomadas(editusuariodto.getClasesTomadas());
+        usuario.setClasesRestantes(editusuariodto.getClasesRestantes());
                      
                
         usuarioService.save(usuario);
@@ -180,7 +194,48 @@ public class AuthController {
         return new ResponseEntity(new Mensaje("Usuario eliminado correctamente"), HttpStatus.OK);
     }
    
+    //para actualizar la foto de perfil
+    @PutMapping("/foto/{id}")
+    public ResponseEntity<?> foto(@PathVariable("id") int id, @RequestBody EditUsuarioDto editusuariodto){
+        if(!usuarioService.existsById(id)){
+            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);
+        }
+        if(usuarioService.existsByNombreUsuario(editusuariodto.getNombreUsuario()) && usuarioService.
+                getByNombreUsuario(editusuariodto.getNombreUsuario()).get().getId() != id){
+        return new ResponseEntity(new Mensaje("Nombre existente"), HttpStatus.BAD_REQUEST);
+        }
+        
+                
+        Usuario usuario = usuarioService.getOne(id).get();
+        
+        
+        usuario.setFotoPerfil(editusuariodto.getFotoPerfil());         
+        usuarioService.save(usuario);
+        
+        return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
+    }
+     @PostMapping("/fotoperfil")
+     public ResponseEntity<String> uploadImage(@RequestBody Map<String, String> data) throws IOException {
+         String imageData = data.get("imageData");
+         String base64Image = imageData.split(",")[1];
+         byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+         BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+         //guarda la imagen en la base de datos
+         
+         return ResponseEntity.ok().body("Imagen subida correctamente");
+     }
     
+     @PutMapping("/fotoperfil/{id}")
+     public ResponseEntity updateFoto(@PathVariable int id, @RequestBody EditUsuarioDto editusuariodto){
+         Usuario usuario = usuarioService.getOne(id).get();
+        
+        
+        usuario.setFotoPerfil(editusuariodto.getFotoPerfil());         
+        usuarioService.save(usuario);
+        
+        return new ResponseEntity(new Mensaje("Foto actualizada correctamente"), HttpStatus.OK);
+       }
+     
 }
 
 

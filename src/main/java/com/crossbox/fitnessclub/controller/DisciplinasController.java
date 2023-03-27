@@ -160,4 +160,12 @@ public class DisciplinasController {
         
         return new ResponseEntity(new Mensaje("Objeto actualizado correctamente"), HttpStatus.OK);
     }
+    
+    @GetMapping("/detailname/{nombre}")
+    public ResponseEntity<Disciplinas> getByNombreUsuario(@PathVariable("nombre") String nombre){
+        if(!sDisciplinas.existByNombre(nombre))
+            return new ResponseEntity(new Mensaje("no existe"), HttpStatus.NOT_FOUND);
+        Disciplinas disciplinas = sDisciplinas.getByNombre(nombre).get();
+        return new ResponseEntity(disciplinas, HttpStatus.OK);
+    }
 }

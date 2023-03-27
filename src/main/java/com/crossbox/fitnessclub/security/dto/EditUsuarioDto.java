@@ -1,8 +1,6 @@
 
 package com.crossbox.fitnessclub.security.dto;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NuevoUsuario {
+public class EditUsuarioDto {
     @NotBlank
     private String nombre;
     @NotBlank
@@ -27,7 +25,7 @@ public class NuevoUsuario {
     private String email;
     @NotBlank
     private String password;
-    private Set<String> roles = new HashSet<>();
+   
     private int suscripcionActual;
     private String fechaActualSus;
     private int clasesTomadas;
@@ -35,10 +33,10 @@ public class NuevoUsuario {
     
     //constructor
 
-    public NuevoUsuario() {
+    public EditUsuarioDto() {
     }
 
-    public NuevoUsuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes) {
+    public EditUsuarioDto(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -49,12 +47,10 @@ public class NuevoUsuario {
         this.nombreUsuario = nombreUsuario;
         this.email = email;
         this.password = password;
+        
         this.suscripcionActual = suscripcionActual;
         this.fechaActualSus = fechaActualSus;
         this.clasesTomadas = clasesTomadas;
         this.ClasesRestantes = ClasesRestantes;
     }
-    
-    
-       
 }
