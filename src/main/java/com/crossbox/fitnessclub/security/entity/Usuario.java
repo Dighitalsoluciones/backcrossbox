@@ -41,8 +41,8 @@ public class Usuario {
     
     @NotNull
     private String telefono;
-    
-    @Column(name = "fotoPerfil", nullable = false, length = 450)
+    //ver si este tipo de configuracion no trae problemas, se cambio la propiedad lenght por columndefinition para aumentar el tamaño de la columna
+    @Column(name = "fotoPerfil", nullable = false, columnDefinition = "MEDIUMTEXT")
     private String fotoPerfil;
     
     @NotNull
