@@ -23,7 +23,7 @@ public class FechaController {
 
     
 
-    @GetMapping
+    @GetMapping("/todas")
     public ResponseEntity<List<dtoFecha>> obtenerFechas(@RequestParam("fechaInicio") Date fechaInicio,
                                                          @RequestParam("fechaFin") Date fechaFin) {
         List<dtoFecha> fechas = servfecha.obtenerFechas(fechaInicio, fechaFin);
