@@ -149,7 +149,7 @@ public class AuthController {
         usuario.setFotoPerfil(editusuariodto.getFotoPerfil());
         usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
         usuario.setEmail(editusuariodto.getEmail());
-        usuario.setPassword(editusuariodto.getPassword());
+        usuario.setPassword(passwordEncoder.encode(editusuariodto.getPassword()));
        
         usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
         usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
