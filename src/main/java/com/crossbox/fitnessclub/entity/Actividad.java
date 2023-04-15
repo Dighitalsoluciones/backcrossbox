@@ -1,15 +1,18 @@
 
 package com.crossbox.fitnessclub.entity;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,21 +26,30 @@ public class Actividad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre")
-    private String nombre;
+    @NotBlank
+    private String name;
 
-    @OneToMany(mappedBy = "actividad", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Dia> dias;
+    @NotBlank
+    private String description;
 
-    // Constructor
+    @NotBlank
+    private String image;
 
-    public Actividad() {
-    }
+    @NotNull
+    private Integer maxCapacity;
 
-    public Actividad(String nombre, List<Dia> dias) {
-        this.nombre = nombre;
-        this.dias = dias;
-    }
-    
+    @NotNull
+    private Integer duration;
+
+    @NotNull
+    private LocalDate startDate;
+
+    @NotNull
+    private LocalDate endDate;
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Turnos> turns = new ArrayList<>();
+
+    // constructors, getters, and setters
     
 }
