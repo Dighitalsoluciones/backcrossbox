@@ -29,7 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/actividades")
-@CrossOrigin(origins = "https://localhost4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ActividadesController {
   @Autowired
   private ActividadRepository actividadRepository;
@@ -46,7 +46,7 @@ public class ActividadesController {
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @GetMapping("/traer")
+    @GetMapping("/fecha")
     public List<ActividadDTO> getActividades(
             @RequestParam(name = "fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         List<Actividad> actividades = actividadRepository.findByDia(fecha);
@@ -70,7 +70,7 @@ public class ActividadesController {
       return ResponseEntity.notFound().build();
     }
   }
-@PostMapping
+@PostMapping("/crear")
   public ResponseEntity<Actividad> crearActividad(@RequestBody Actividad actividad) {
     Actividad nuevaActividad = actividadService.guardarActividad(actividad);
     return ResponseEntity.created(
