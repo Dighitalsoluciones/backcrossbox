@@ -17,7 +17,7 @@ public class ActividadService {
   @Autowired
   private ActividadRepository actividadRepository;
 
-  public List<Actividad> getActividades(LocalDate fecha) {
+  public List<Actividad> getActividades(String fecha) {
     return actividadRepository.findByDia(fecha);
   }
 
@@ -35,5 +35,9 @@ public class ActividadService {
   
    public List<Actividad> list(){
         return actividadRepository.findAll();
+    }
+   
+    public void save(Actividad actividad){
+        actividadRepository.save(actividad);
     }
 }

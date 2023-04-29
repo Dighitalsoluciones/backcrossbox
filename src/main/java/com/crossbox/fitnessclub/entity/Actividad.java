@@ -28,10 +28,10 @@ public class Actividad {
   private String descripcion;
 
   @Column(nullable = false)
-  private LocalDate dia;
+  private String dia;
 
   @Column(nullable = false)
-  private LocalTime horario;
+  private String horario;
 
   @Column(nullable = false)
   private Integer cupo;
@@ -41,7 +41,7 @@ public class Actividad {
     public Actividad() {
     }
 
-    public Actividad(String nombre, String descripcion, LocalDate dia, LocalTime horario, Integer cupo) {
+    public Actividad(String nombre, String descripcion, String dia, String horario, Integer cupo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.dia = dia;

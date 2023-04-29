@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActividadRepository extends JpaRepository<Actividad, Long> {
-  List<Actividad> findByDia(LocalDate dia);
+  List<Actividad> findByDia(String dia);
 }

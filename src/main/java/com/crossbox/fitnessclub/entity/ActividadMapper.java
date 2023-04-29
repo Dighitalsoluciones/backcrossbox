@@ -17,8 +17,8 @@ public class ActividadMapper {
         actividadDTO.setId(actividad.getId());
         actividadDTO.setNombre(actividad.getNombre());
         actividadDTO.setDescripcion(actividad.getDescripcion());
-        actividadDTO.setDia(actividad.getDia().format(DIA_FORMATTER));
-        actividadDTO.setHorario(actividad.getHorario().format(HORARIO_FORMATTER));
+        actividadDTO.setDia(actividad.getDia());
+        actividadDTO.setHorario(actividad.getHorario());
         actividadDTO.setCupo(actividad.getCupo());
         return actividadDTO;
     }

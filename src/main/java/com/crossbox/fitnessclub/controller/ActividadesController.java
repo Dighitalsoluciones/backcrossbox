@@ -5,11 +5,13 @@ import com.crossbox.fitnessclub.dto.ActividadDTO;
 import com.crossbox.fitnessclub.entity.Actividad;
 import com.crossbox.fitnessclub.entity.ActividadMapper;
 import com.crossbox.fitnessclub.repository.ActividadRepository;
+import com.crossbox.fitnessclub.security.controller.Mensaje;
 import com.crossbox.fitnessclub.service.ActividadService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -48,13 +50,13 @@ public class ActividadesController {
 
     @GetMapping("/fecha")
     public List<ActividadDTO> getActividades(
-            @RequestParam(name = "fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+            @RequestParam(name = "fecha") String fecha) {
         List<Actividad> actividades = actividadRepository.findByDia(fecha);
         return actividades.stream().map(actividadMapper::toDTO).collect(Collectors.toList());
     }
 
 
-  @PostMapping("/{id}/reservar")
+  @PostMapping("/reservar/{id}")
   public ResponseEntity<?> reservarActividad(@PathVariable("id") Long id) {
     Optional<Actividad> optionalActividad = actividadRepository.findById(id);
     if (optionalActividad.isPresent()) {
@@ -78,6 +80,23 @@ public class ActividadesController {
                     .buildAndExpand(nuevaActividad.getId()).toUri())
             .body(nuevaActividad);
   }
+  
+  @PostMapping("/create")
+    public ResponseEntity<?> create(@RequestBody ActividadDTO actDTO) {
+        if (StringUtils.isBlank(actDTO.getNombre())) {
+            return new ResponseEntity(new Mensaje("Campo Obligatorio"), HttpStatus.BAD_REQUEST);
+        }
+        
+        if (StringUtils.isBlank(actDTO.getDescripcion())) {
+            return new ResponseEntity(new Mensaje("Campo Obligatorio"), HttpStatus.BAD_REQUEST);
+        }      
+
+        Actividad actividad = new Actividad(
+                actDTO.getNombre(), actDTO.getDescripcion(), actDTO.getDia(),actDTO.getHorario(),actDTO.getCupo());
+        actividadService.save(actividad);
+        return new ResponseEntity(new Mensaje("Nuevo turno creado exitosamente"), HttpStatus.OK);
+    }
+  
 
   @PutMapping("/{id}")
   public ResponseEntity<Actividad> actualizarActividad(
