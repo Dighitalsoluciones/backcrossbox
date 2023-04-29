@@ -87,9 +87,13 @@ public class ActividadesController {
             return new ResponseEntity(new Mensaje("Campo Obligatorio"), HttpStatus.BAD_REQUEST);
         }
         
-        if (StringUtils.isBlank(actDTO.getDescripcion())) {
+        if (StringUtils.isBlank(actDTO.getDia())) {
             return new ResponseEntity(new Mensaje("Campo Obligatorio"), HttpStatus.BAD_REQUEST);
-        }      
+        }  
+        
+        if (StringUtils.isBlank(actDTO.getHorario())) {
+            return new ResponseEntity(new Mensaje("Campo Obligatorio"), HttpStatus.BAD_REQUEST);
+        }
 
         Actividad actividad = new Actividad(
                 actDTO.getNombre(), actDTO.getDescripcion(), actDTO.getDia(),actDTO.getHorario(),actDTO.getCupo());
