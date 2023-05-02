@@ -17,23 +17,28 @@ public class TurnoService {
   @Autowired
   TurnoRepository turnoRepository;
 
-  public List<Turno> buscarTurnos(Long actividadId, LocalDate fecha) {
-    LocalDateTime horaInicio = fecha.atStartOfDay();
-    LocalDateTime horaFin = horaInicio.plusHours(24);
-
-    return turnoRepository.findByActividadIdAndHoraInicioGreaterThanEqualAndHoraFinLessThanEqual(
-        actividadId, horaInicio, horaFin);
+   public List<Turno> list(){
+        return turnoRepository.findAll();
+    }
+  
+  public List<Turno> getTurnoPorDia(String dia) {
+    return turnoRepository.findByDia(dia);
   }
 
-  public Optional<Turno> buscarTurno(Long id) {
+  public Optional<Turno> buscarTurnoPorId(Long id) {
     return turnoRepository.findById(id);
   }
 
-  public Turno guardarTurno(Turno turno) {
+  public Turno save(Turno turno) {
     return turnoRepository.save(turno);
   }
 
   public void eliminarTurno(Long id) {
     turnoRepository.deleteById(id);
   }
+  
+  public boolean existsById(Long id){
+        return turnoRepository.existsById(id);
+    }
+  
 }

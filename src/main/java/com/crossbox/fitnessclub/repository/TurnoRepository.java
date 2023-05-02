@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
-    List<Turno> findByActividadIdAndHoraInicioGreaterThanEqualAndHoraFinLessThanEqual(
-    Long ActividadId, LocalDateTime horarioInicio, LocalDateTime horarioFin);
+    List<Turno> findByDia(String dia);
 }
