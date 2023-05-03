@@ -127,7 +127,7 @@ public class ActividadesController {
     }
   }
 
-   @GetMapping("/{id}")
+   @GetMapping("/detail/{id}")
   public ResponseEntity<Actividad> buscarActividad(@PathVariable Long id) {
     Optional<Actividad> actividad = actividadService.buscarActividad(id);
 
@@ -137,5 +137,6 @@ public class ActividadesController {
       return ResponseEntity.notFound().build();
     }
   }
+  
  
 }
