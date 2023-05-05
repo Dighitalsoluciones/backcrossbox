@@ -6,6 +6,7 @@ import com.crossbox.fitnessclub.security.dto.EditUsuarioDto;
 import com.crossbox.fitnessclub.security.dto.JwtDto;
 import com.crossbox.fitnessclub.security.dto.LoginUsuario;
 import com.crossbox.fitnessclub.security.dto.NuevoUsuario;
+import com.crossbox.fitnessclub.security.dto.PassUsuarioDto;
 import com.crossbox.fitnessclub.security.entity.Rol;
 import com.crossbox.fitnessclub.security.entity.Usuario;
 import com.crossbox.fitnessclub.security.enums.RolNombre;
@@ -133,9 +134,7 @@ public class AuthController {
         if(StringUtils.isBlank(editusuariodto.getEmail())){
             return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
         }
-        if(StringUtils.isBlank(editusuariodto.getPassword())){
-            return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
-        }
+      
         
                 
         Usuario usuario = usuarioService.getOne(id).get();
@@ -149,7 +148,6 @@ public class AuthController {
         usuario.setFotoPerfil(editusuariodto.getFotoPerfil());
         usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
         usuario.setEmail(editusuariodto.getEmail());
-        usuario.setPassword(passwordEncoder.encode(editusuariodto.getPassword()));
        
         usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
         usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
@@ -159,6 +157,23 @@ public class AuthController {
                
         usuarioService.save(usuario);
         
+        return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
+    }
+    
+    //Solo Actualiza la contraseña
+           @PutMapping("/updatepass/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody PassUsuarioDto passUsuarioDto){
+        if(!usuarioService.existsById(id)){
+            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);
+        }
+        
+        if(StringUtils.isBlank(passUsuarioDto.getPassword())){
+            return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
+        }
+                        
+        Usuario usuario = usuarioService.getOne(id).get();
+        usuario.setPassword(passwordEncoder.encode(passUsuarioDto.getPassword()));
+        usuarioService.save(usuario);        
         return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
     }
     

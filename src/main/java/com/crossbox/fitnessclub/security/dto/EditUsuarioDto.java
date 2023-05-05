@@ -23,8 +23,6 @@ public class EditUsuarioDto {
     private String nombreUsuario;
     @NotBlank
     private String email;
-    @NotBlank
-    private String password;
    
     private int suscripcionActual;
     private String fechaActualSus;
@@ -36,7 +34,7 @@ public class EditUsuarioDto {
     public EditUsuarioDto() {
     }
 
-    public EditUsuarioDto(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes) {
+    public EditUsuarioDto(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -46,7 +44,6 @@ public class EditUsuarioDto {
         this.fotoPerfil = fotoPerfil;
         this.nombreUsuario = nombreUsuario;
         this.email = email;
-        this.password = password;
         
         this.suscripcionActual = suscripcionActual;
         this.fechaActualSus = fechaActualSus;
