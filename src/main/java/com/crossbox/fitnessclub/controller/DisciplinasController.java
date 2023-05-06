@@ -70,7 +70,7 @@ public class DisciplinasController {
         }
 
         Disciplinas disciplinas = new Disciplinas(
-                dtodisciplinas.getNombre(), dtodisciplinas.getDescripcion(), dtodisciplinas.getImagen());
+                dtodisciplinas.getNombre(), dtodisciplinas.getDescripcion(), dtodisciplinas.getImagen(), dtodisciplinas.getProfesor());
         sDisciplinas.save(disciplinas);
         return new ResponseEntity(new Mensaje("Nueva disciplina creada exitosamente"), HttpStatus.OK);
     }
@@ -102,6 +102,7 @@ public class DisciplinasController {
         disciplinas.setNombre(dtodisciplinas.getNombre());
         disciplinas.setDescripcion(dtodisciplinas.getDescripcion());
         disciplinas.setImagen(dtodisciplinas.getImagen());
+        disciplinas.setProfesor(dtodisciplinas.getProfesor());
         sDisciplinas.save(disciplinas);
         
         return new ResponseEntity(new Mensaje("Objeto actualizado correctamente"), HttpStatus.OK);

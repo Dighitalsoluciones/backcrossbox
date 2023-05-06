@@ -20,17 +20,17 @@ public class Disciplinas {
     private String descripcion;
     @Column(name = "imagen", nullable = false, columnDefinition = "MEDIUMTEXT")
     private String imagen;
-    
+    private String profesor;
       //constructor
 
     public Disciplinas() {
     }
 
-    public Disciplinas(String nombre, String descripcion, String imagen) {
+    public Disciplinas(String nombre, String descripcion, String imagen, String profesor) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
-        
+        this.profesor = profesor;
     }
     
     
