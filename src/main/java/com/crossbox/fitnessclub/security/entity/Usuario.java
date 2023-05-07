@@ -42,7 +42,7 @@ public class Usuario {
     @NotNull
     private String telefono;
     //ver si este tipo de configuracion no trae problemas, se cambio la propiedad lenght por columndefinition para aumentar el tamaño de la columna
-    @Column(name = "imagen", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "fotoPerfil", nullable = false, columnDefinition = "LONGTEXT")
     private String fotoPerfil;
     
     @NotNull
