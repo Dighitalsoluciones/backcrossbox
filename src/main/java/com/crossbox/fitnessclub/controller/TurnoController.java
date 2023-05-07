@@ -56,17 +56,6 @@ public class TurnoController {
         return new ResponseEntity(turno, HttpStatus.OK);
     }
 
-  /* Metodo anterior
-  @PostMapping
-  public ResponseEntity<Turno> crearTurno(@RequestBody Turno turno) {
-    Turno nuevoTurno = turnoService.save(turno);
-    return ResponseEntity.created(
-            ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(nuevoTurno.getId()).toUri())
-            .body(nuevoTurno);
-  }
-*/
-  
   @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody TurnoDTO turnoDto) {
         if (StringUtils.isBlank(turnoDto.getActividad())) {
@@ -82,8 +71,8 @@ public class TurnoController {
         }
 
         Turno turno = new Turno(
-                turnoDto.getActividad(), turnoDto.getDia(), turnoDto.getHorario(),turnoDto.getNombre(),turnoDto.getApellido(),turnoDto.getDni(),turnoDto.getTelefono(),
-        turnoDto.getFotoPerfil(),turnoDto.getNombreUsuario());
+            turnoDto.getActividad(), turnoDto.getDia(), turnoDto.getHorario(),turnoDto.getNombre(),turnoDto.getApellido(),
+            turnoDto.getDni(),turnoDto.getTelefono(),turnoDto.getNombreUsuario());
         turnoService.save(turno);
         return new ResponseEntity(new Mensaje("Nuevo turno creado exitosamente"), HttpStatus.OK);
     }

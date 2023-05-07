@@ -17,8 +17,6 @@ public class TurnoDTO {
   private String apellido;
   private String dni;
   private String telefono;
-  @Column(name = "fotoPerfil", columnDefinition = "MEDIUMTEXT")
-  private String fotoPerfil;
   private String nombreUsuario; 
   
   //constructor
@@ -26,7 +24,7 @@ public class TurnoDTO {
     public TurnoDTO() {
     }
 
-    public TurnoDTO(String actividad, String dia, String horario, String nombre, String apellido, String dni, String telefono, String fotoPerfil, String nombreUsuario) {
+    public TurnoDTO(String actividad, String dia, String horario, String nombre, String apellido, String dni, String telefono, String nombreUsuario) {
         this.actividad = actividad;
         this.dia = dia;
         this.horario = horario;
@@ -34,7 +32,6 @@ public class TurnoDTO {
         this.apellido = apellido;
         this.dni = dni;
         this.telefono = telefono;
-        this.fotoPerfil = fotoPerfil;
         this.nombreUsuario = nombreUsuario;
     }
   

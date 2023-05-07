@@ -18,7 +18,7 @@ public class Disciplinas {
     private int id;
     private String nombre;
     private String descripcion;
-    @Column(name = "imagen", nullable = false, columnDefinition = "MEDIUMTEXT")
+    @Column(name = "imagen", nullable = false, columnDefinition = "LONGTEXT")
     private String imagen;
     private String profesor;
       //constructor

@@ -38,8 +38,6 @@ public class Turno {
   private String dni;
   @Column(nullable = false)
   private String telefono;
-  @Column(name = "fotoPerfil", columnDefinition = "MEDIUMTEXT")
-  private String fotoPerfil;
   @Column(nullable = false)
   private String nombreUsuario;
   
@@ -48,15 +46,14 @@ public class Turno {
     public Turno() {
     }
 
-    public Turno(String actividad, String dia, String horario, String nombre, String apellido, String dni, String telefono, String fotoPerfil, String nombreUsuario) {
+    public Turno(String actividad, String dia, String horario, String nombre, String apellido, String dni, String telefono, String nombreUsuario) {
         this.actividad = actividad;
         this.dia = dia;
         this.horario = horario;
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
-        this.telefono = telefono;
-        this.fotoPerfil = fotoPerfil;
+        this.telefono = telefono;        
         this.nombreUsuario = nombreUsuario;
     }
 
