@@ -90,6 +90,7 @@ public class TurnoController {
     }
   }
 
+  /*Metodo anterior
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<Void> eliminarTurno(@PathVariable Long id) {
     Optional<Turno> turno = turnoService.buscarTurnoPorId(id);
@@ -100,6 +101,15 @@ public class TurnoController {
     } else {
       return ResponseEntity.notFound().build();
     }
-  }
+  }*/
+  
+  @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        if (!turnoService.existsById(id)) {
+            return new ResponseEntity(new Mensaje("Id Inexistente"), HttpStatus.NOT_FOUND);
+        }
+        turnoService.eliminarTurno(id);
+        return new ResponseEntity(new Mensaje("Objeto eliminado correctamente"), HttpStatus.OK);
+    }
 
 }
