@@ -115,17 +115,14 @@ public class ActividadesController {
     }
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> eliminarActividad(@PathVariable Long id) {
-    Optional<Actividad> actividad = actividadService.buscarActividad(id);
-
-    if (actividad.isPresent()) {
-      actividadService.eliminarActividad(id);
-      return ResponseEntity.noContent().build();
-    } else {
-      return ResponseEntity.notFound().build();
+   @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        if (!actividadService.existsById(id)) {
+            return new ResponseEntity(new Mensaje("Id Inexistente"), HttpStatus.NOT_FOUND);
+        }
+        actividadService.delete(id);
+        return new ResponseEntity(new Mensaje("Objeto eliminado correctamente"), HttpStatus.OK);
     }
-  }
 
    @GetMapping("/detail/{id}")
   public ResponseEntity<Actividad> buscarActividad(@PathVariable Long id) {

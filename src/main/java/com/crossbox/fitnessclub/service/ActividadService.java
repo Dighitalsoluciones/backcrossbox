@@ -29,7 +29,7 @@ public class ActividadService {
     return actividadRepository.save(actividad);
   }
 
-  public void eliminarActividad(Long id) {
+  public void delete(Long id) {
     actividadRepository.deleteById(id);
   }
   
@@ -39,5 +39,9 @@ public class ActividadService {
    
     public void save(Actividad actividad){
         actividadRepository.save(actividad);
+    }
+    
+    public boolean existsById(Long id){
+        return actividadRepository.existsById(id);
     }
 }
