@@ -102,18 +102,30 @@ public class ActividadesController {
     }
   
 
-  @PutMapping("/{id}")
-  public ResponseEntity<Actividad> actualizarActividad(
-          @PathVariable Long id, @RequestBody Actividad actividad) {
-    Optional<Actividad> actividadExistente = actividadService.buscarActividad(id);
-
-    if (actividadExistente.isPresent()) {
-      actividad.setId(id);
-      return ResponseEntity.ok(actividadService.guardarActividad(actividad));
-    } else {
-      return ResponseEntity.notFound().build();
+  @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody ActividadDTO actividadDTO){
+        if(!actividadService.existsById(id)){
+            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);
+        }
+        
+        if(StringUtils.isBlank(actividadDTO.getNombre())){
+            return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_REQUEST);
+        }
+        
+                           
+        
+        Actividad actividad = actividadService.buscarActividad(id).get();
+        
+        actividad.setNombre(actividadDTO.getNombre());
+        actividad.setDescripcion(actividadDTO.getDescripcion());
+        actividad.setDia(actividadDTO.getDia());
+        actividad.setHorario(actividadDTO.getHorario());
+        actividad.setCupo(actividadDTO.getCupo());
+        
+        actividadService.save(actividad);
+        
+        return new ResponseEntity(new Mensaje("Objeto actualizado correctamente"), HttpStatus.OK);
     }
-  }
 
    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
