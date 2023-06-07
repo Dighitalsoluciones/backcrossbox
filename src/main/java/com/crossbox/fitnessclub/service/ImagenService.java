@@ -24,15 +24,15 @@ public class ImagenService {
         imagenRepository.save(imagen);
     }
     
-    public void delete(Long id){
+    public void delete(int id){
         imagenRepository.deleteById(id);
     }
     
-    public Optional<Imagen> getOne(Long id){
+    public Optional<Imagen> getOne(int id){
         return imagenRepository.findById(id);
     }
     
-    public Boolean exists(Long id){
+    public Boolean exists(int id){
         return imagenRepository.existsById(id);
     }
 }
