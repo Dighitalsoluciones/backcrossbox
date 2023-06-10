@@ -33,12 +33,14 @@ public class NuevoUsuario {
     private int clasesTomadas;
     private int ClasesRestantes;
     
+    private String idImagenCloudinary;
+    
     //constructor
 
     public NuevoUsuario() {
     }
 
-    public NuevoUsuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes) {
+    public NuevoUsuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes, String idImagenCloudinary) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -53,7 +55,10 @@ public class NuevoUsuario {
         this.fechaActualSus = fechaActualSus;
         this.clasesTomadas = clasesTomadas;
         this.ClasesRestantes = ClasesRestantes;
+        this.idImagenCloudinary = idImagenCloudinary;
     }
+
+    
     
     
        

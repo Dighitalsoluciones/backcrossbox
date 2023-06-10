@@ -29,12 +29,14 @@ public class EditUsuarioDto {
     private int clasesTomadas;
     private int ClasesRestantes;
     
+    private String idImagenCloudinary;
+    
     //constructor
 
     public EditUsuarioDto() {
     }
 
-    public EditUsuarioDto(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes) {
+    public EditUsuarioDto(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, int suscripcionActual, String fechaActualSus, int clasesTomadas, int ClasesRestantes, String idImagenCloudinary) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -44,10 +46,12 @@ public class EditUsuarioDto {
         this.fotoPerfil = fotoPerfil;
         this.nombreUsuario = nombreUsuario;
         this.email = email;
-        
         this.suscripcionActual = suscripcionActual;
         this.fechaActualSus = fechaActualSus;
         this.clasesTomadas = clasesTomadas;
         this.ClasesRestantes = ClasesRestantes;
+        this.idImagenCloudinary = idImagenCloudinary;
     }
+
+   
 }

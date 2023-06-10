@@ -2,6 +2,7 @@
 package com.crossbox.fitnessclub.security.controller;
 
 
+import com.crossbox.fitnessclub.entity.Imagen;
 import com.crossbox.fitnessclub.security.dto.EditUsuarioDto;
 import com.crossbox.fitnessclub.security.dto.JwtDto;
 import com.crossbox.fitnessclub.security.dto.LoginUsuario;
@@ -11,11 +12,14 @@ import com.crossbox.fitnessclub.security.entity.Rol;
 import com.crossbox.fitnessclub.security.entity.Usuario;
 import com.crossbox.fitnessclub.security.enums.RolNombre;
 import com.crossbox.fitnessclub.security.jwt.JwtProvider;
+import com.crossbox.fitnessclub.security.service.CloudinaryService;
 import com.crossbox.fitnessclub.security.service.RolService;
 import com.crossbox.fitnessclub.security.service.UsuarioService;
+import com.crossbox.fitnessclub.service.ImagenService;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +28,6 @@ import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,9 +64,13 @@ public class AuthController {
     RolService rolService;
     @Autowired
     JwtProvider jwtProvider;
+    @Autowired
+    CloudinaryService cloudinaryService;
+    @Autowired
+    ImagenService imagenService;
  
     @PostMapping("/nuevo")
-    public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
+    public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult) throws IOException{
        if (bindingResult.hasErrors())
            return new ResponseEntity(new Mensaje("Campos mal ingresados o email invalido"), HttpStatus.BAD_REQUEST);
       
@@ -75,7 +82,7 @@ public class AuthController {
        
        Usuario usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getApellido(), nuevoUsuario.getDni(), nuevoUsuario.getDireccion(),nuevoUsuario.getLocalidad(),nuevoUsuario.getTelefono(),
                nuevoUsuario.getFotoPerfil(), nuevoUsuario.getNombreUsuario(),nuevoUsuario.getEmail(), passwordEncoder.encode(nuevoUsuario.getPassword()), nuevoUsuario.getSuscripcionActual(),
-                       nuevoUsuario.getFechaActualSus(), nuevoUsuario.getClasesTomadas(), nuevoUsuario.getClasesRestantes());
+                       nuevoUsuario.getFechaActualSus(), nuevoUsuario.getClasesTomadas(), nuevoUsuario.getClasesRestantes(), nuevoUsuario.getIdImagenCloudinary() );
        
        Set<Rol> roles = new HashSet<>();
        roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
@@ -83,6 +90,16 @@ public class AuthController {
        if(nuevoUsuario.getRoles().contains("admin"))
            roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
        usuario.setRoles(roles);
+       
+       
+       Map result = cloudinaryService.uploading(nuevoUsuario.getFotoPerfil());
+       
+        Imagen imagen = new Imagen((String) result.get("original_filename"), (String) result.get("url"), (String) result.get("public_id"));
+        imagenService.save(imagen);
+       
+       usuario.setFotoPerfil((String) result.get("url"));
+       usuario.setIdImagenCloudinary((String) result.get("public_id"));
+       
        usuarioService.save(usuario);
        
        return new ResponseEntity(new Mensaje("Usuario guardado"),HttpStatus.CREATED);
@@ -110,7 +127,7 @@ public class AuthController {
     
         
         @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody EditUsuarioDto editusuariodto){
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody EditUsuarioDto editusuariodto) throws IOException{
         if(!usuarioService.existsById(id)){
             return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);
         }
@@ -138,7 +155,8 @@ public class AuthController {
         
                 
         Usuario usuario = usuarioService.getOne(id).get();
-        
+       
+       
         usuario.setNombre(editusuariodto.getNombre());
         usuario.setApellido(editusuariodto.getApellido());
         usuario.setDni(editusuariodto.getDni());
@@ -148,12 +166,11 @@ public class AuthController {
         usuario.setFotoPerfil(editusuariodto.getFotoPerfil());
         usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
         usuario.setEmail(editusuariodto.getEmail());
-       
         usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
         usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
         usuario.setClasesTomadas(editusuariodto.getClasesTomadas());
         usuario.setClasesRestantes(editusuariodto.getClasesRestantes());
-                     
+        usuario.setIdImagenCloudinary(editusuariodto.getIdImagenCloudinary());             
                
         usuarioService.save(usuario);
         

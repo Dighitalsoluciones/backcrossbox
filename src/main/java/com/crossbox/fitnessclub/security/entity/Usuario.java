@@ -64,6 +64,7 @@ public class Usuario {
     
     private int clasesRestantes;
     
+    private String idImagenCloudinary;
     
     
         
@@ -72,7 +73,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int clasesRestantes) {
+    public Usuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int clasesRestantes, String idImagenCloudinary) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -87,7 +88,10 @@ public class Usuario {
         this.fechaActualSus = fechaActualSus;
         this.clasesTomadas = clasesTomadas;
         this.clasesRestantes = clasesRestantes;
+        this.idImagenCloudinary = idImagenCloudinary;
     }
+
+    
 
                 
     
