@@ -156,22 +156,58 @@ public class AuthController {
                 
         Usuario usuario = usuarioService.getOne(id).get();
        
-       
+        if(editusuariodto.getIdImagenCloudinary() != null){
+        Map result = cloudinaryService.delete(editusuariodto.getIdImagenCloudinary());
+        
+        Map resultado = cloudinaryService.uploading(editusuariodto.getFotoPerfil());
+        Imagen imagen = new Imagen((String) resultado.get("original_filename"), (String) resultado.get("url"), (String) resultado.get("public_id"));
+        imagenService.save(imagen);
+        
+        
+        
+        
         usuario.setNombre(editusuariodto.getNombre());
         usuario.setApellido(editusuariodto.getApellido());
         usuario.setDni(editusuariodto.getDni());
         usuario.setDireccion(editusuariodto.getDireccion());
         usuario.setLocalidad(editusuariodto.getLocalidad());
         usuario.setTelefono(editusuariodto.getTelefono());
-        usuario.setFotoPerfil(editusuariodto.getFotoPerfil());
+        usuario.setFotoPerfil((String) resultado.get("url"));
         usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
         usuario.setEmail(editusuariodto.getEmail());
         usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
         usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
         usuario.setClasesTomadas(editusuariodto.getClasesTomadas());
         usuario.setClasesRestantes(editusuariodto.getClasesRestantes());
-        usuario.setIdImagenCloudinary(editusuariodto.getIdImagenCloudinary());             
-               
+        usuario.setIdImagenCloudinary((String) resultado.get("public_id"));
+   
+        usuarioService.save(usuario);
+        
+        return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
+        
+        }
+        
+        Map resultado = cloudinaryService.uploading(editusuariodto.getFotoPerfil());
+        Imagen imagen = new Imagen((String) resultado.get("original_filename"), (String) resultado.get("url"), (String) resultado.get("public_id"));
+        imagenService.save(imagen);
+
+     
+        
+        usuario.setNombre(editusuariodto.getNombre());
+        usuario.setApellido(editusuariodto.getApellido());
+        usuario.setDni(editusuariodto.getDni());
+        usuario.setDireccion(editusuariodto.getDireccion());
+        usuario.setLocalidad(editusuariodto.getLocalidad());
+        usuario.setTelefono(editusuariodto.getTelefono());
+        usuario.setFotoPerfil((String) resultado.get("url"));
+        usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
+        usuario.setEmail(editusuariodto.getEmail());
+        usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
+        usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
+        usuario.setClasesTomadas(editusuariodto.getClasesTomadas());
+        usuario.setClasesRestantes(editusuariodto.getClasesRestantes());
+        usuario.setIdImagenCloudinary((String) resultado.get("public_id"));
+   
         usuarioService.save(usuario);
         
         return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
