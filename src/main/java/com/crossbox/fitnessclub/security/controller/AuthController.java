@@ -4,6 +4,7 @@ package com.crossbox.fitnessclub.security.controller;
 
 import com.crossbox.fitnessclub.entity.Imagen;
 import com.crossbox.fitnessclub.security.dto.EditUsuarioDto;
+import com.crossbox.fitnessclub.security.dto.ImgUsuarioDto;
 import com.crossbox.fitnessclub.security.dto.JwtDto;
 import com.crossbox.fitnessclub.security.dto.LoginUsuario;
 import com.crossbox.fitnessclub.security.dto.NuevoUsuario;
@@ -82,7 +83,7 @@ public class AuthController {
        
        Usuario usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getApellido(), nuevoUsuario.getDni(), nuevoUsuario.getDireccion(),nuevoUsuario.getLocalidad(),nuevoUsuario.getTelefono(),
                nuevoUsuario.getFotoPerfil(), nuevoUsuario.getNombreUsuario(),nuevoUsuario.getEmail(), passwordEncoder.encode(nuevoUsuario.getPassword()), nuevoUsuario.getSuscripcionActual(),
-                       nuevoUsuario.getFechaActualSus(), nuevoUsuario.getClasesTomadas(), nuevoUsuario.getClasesRestantes(), nuevoUsuario.getIdImagenCloudinary() );
+                       nuevoUsuario.getFechaActualSus(), nuevoUsuario.getClasesTomadas(), nuevoUsuario.getClasesRestantes(), nuevoUsuario.getIdImagenCloudinary(), nuevoUsuario.getIdImagen() );
        
        Set<Rol> roles = new HashSet<>();
        roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
@@ -99,7 +100,7 @@ public class AuthController {
        
        usuario.setFotoPerfil((String) result.get("url"));
        usuario.setIdImagenCloudinary((String) result.get("public_id"));
-       
+       usuario.setIdImagen(imagen.getId());
        usuarioService.save(usuario);
        
        return new ResponseEntity(new Mensaje("Usuario guardado"),HttpStatus.CREATED);
@@ -156,62 +157,67 @@ public class AuthController {
                 
         Usuario usuario = usuarioService.getOne(id).get();
        
-        if(editusuariodto.getIdImagenCloudinary() != null){
-        Map result = cloudinaryService.delete(editusuariodto.getIdImagenCloudinary());
-        
-        Map resultado = cloudinaryService.uploading(editusuariodto.getFotoPerfil());
-        Imagen imagen = new Imagen((String) resultado.get("original_filename"), (String) resultado.get("url"), (String) resultado.get("public_id"));
-        imagenService.save(imagen);
-        
-        
-        
-        
         usuario.setNombre(editusuariodto.getNombre());
         usuario.setApellido(editusuariodto.getApellido());
         usuario.setDni(editusuariodto.getDni());
         usuario.setDireccion(editusuariodto.getDireccion());
         usuario.setLocalidad(editusuariodto.getLocalidad());
         usuario.setTelefono(editusuariodto.getTelefono());
-        usuario.setFotoPerfil((String) resultado.get("url"));
+        usuario.setFotoPerfil(editusuariodto.getFotoPerfil());
         usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
         usuario.setEmail(editusuariodto.getEmail());
         usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
         usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
         usuario.setClasesTomadas(editusuariodto.getClasesTomadas());
         usuario.setClasesRestantes(editusuariodto.getClasesRestantes());
-        usuario.setIdImagenCloudinary((String) resultado.get("public_id"));
+        
    
         usuarioService.save(usuario);
         
         return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
         
+    }
+    
+    //solo actualiza la imagen de perfil
+    @PutMapping("/updateimg/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody ImgUsuarioDto imgUsuarioDto) throws IOException{
+        if(!usuarioService.existsById(id)){
+            return new ResponseEntity(new Mensaje("Id inexistente"), HttpStatus.NOT_FOUND);
         }
         
-        Map resultado = cloudinaryService.uploading(editusuariodto.getFotoPerfil());
+        Usuario usuario = usuarioService.getOne(id).get();
+        
+        if(imgUsuarioDto.getIdImagen() != 0){
+        Map result = cloudinaryService.delete(imgUsuarioDto.getIdImagenCloudinary());
+        imagenService.delete(imgUsuarioDto.getIdImagen());
+        
+        Map resultado = cloudinaryService.uploading(imgUsuarioDto.getFotoPerfil());
         Imagen imagen = new Imagen((String) resultado.get("original_filename"), (String) resultado.get("url"), (String) resultado.get("public_id"));
         imagenService.save(imagen);
-
-     
         
-        usuario.setNombre(editusuariodto.getNombre());
-        usuario.setApellido(editusuariodto.getApellido());
-        usuario.setDni(editusuariodto.getDni());
-        usuario.setDireccion(editusuariodto.getDireccion());
-        usuario.setLocalidad(editusuariodto.getLocalidad());
-        usuario.setTelefono(editusuariodto.getTelefono());
         usuario.setFotoPerfil((String) resultado.get("url"));
-        usuario.setNombreUsuario(editusuariodto.getNombreUsuario());
-        usuario.setEmail(editusuariodto.getEmail());
-        usuario.setSuscripcionActual(editusuariodto.getSuscripcionActual());
-        usuario.setFechaActualSus(editusuariodto.getFechaActualSus());
-        usuario.setClasesTomadas(editusuariodto.getClasesTomadas());
-        usuario.setClasesRestantes(editusuariodto.getClasesRestantes());
         usuario.setIdImagenCloudinary((String) resultado.get("public_id"));
-   
+        usuario.setIdImagen(imagen.getId());
+        
         usuarioService.save(usuario);
         
-        return new ResponseEntity(new Mensaje("Usuario actualizado correctamente"), HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("Foto actualizada correctamente"), HttpStatus.OK);
     }
+         
+        Map resultado = cloudinaryService.uploading(imgUsuarioDto.getFotoPerfil());
+        Imagen imagen = new Imagen((String) resultado.get("original_filename"), (String) resultado.get("url"), (String) resultado.get("public_id"));
+        imagenService.save(imagen);
+        
+        usuario.setFotoPerfil((String) resultado.get("url"));
+        usuario.setIdImagenCloudinary((String) resultado.get("public_id"));
+        usuario.setIdImagen(imagen.getId());
+        
+        usuarioService.save(usuario);
+        
+        return new ResponseEntity(new Mensaje("Foto actualizada correctamente"), HttpStatus.OK);
+    }
+    
+    
     
     //Solo Actualiza la contraseña
            @PutMapping("/updatepass/{id}")

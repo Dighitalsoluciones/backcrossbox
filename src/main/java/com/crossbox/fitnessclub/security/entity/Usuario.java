@@ -66,14 +66,14 @@ public class Usuario {
     
     private String idImagenCloudinary;
     
-    
+    private int idImagen;
         
     //generar constructores
 
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int clasesRestantes, String idImagenCloudinary) {
+    public Usuario(String nombre, String apellido, String dni, String direccion, String localidad, String telefono, String fotoPerfil, String nombreUsuario, String email, String password, int suscripcionActual, String fechaActualSus, int clasesTomadas, int clasesRestantes, String idImagenCloudinary, int idImagen) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -89,7 +89,10 @@ public class Usuario {
         this.clasesTomadas = clasesTomadas;
         this.clasesRestantes = clasesRestantes;
         this.idImagenCloudinary = idImagenCloudinary;
+        this.idImagen = idImagen;
     }
+
+   
 
     
 
