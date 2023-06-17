@@ -2,6 +2,7 @@
 package com.crossbox.fitnessclub.security.controller;
 
 
+import com.crossbox.fitnessclub.entity.DecodificarPass;
 import com.crossbox.fitnessclub.entity.Imagen;
 import com.crossbox.fitnessclub.security.dto.EditUsuarioDto;
 import com.crossbox.fitnessclub.security.dto.ImgUsuarioDto;
@@ -20,17 +21,25 @@ import com.crossbox.fitnessclub.service.ImagenService;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import javax.imageio.ImageIO;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.rsocket.server.RSocketServer.Transport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,6 +78,8 @@ public class AuthController {
     CloudinaryService cloudinaryService;
     @Autowired
     ImagenService imagenService;
+    @Autowired
+    private JavaMailSender javaMailSender;
  
     @PostMapping("/nuevo")
     public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult) throws IOException{
@@ -309,6 +320,30 @@ public class AuthController {
         
         return new ResponseEntity(new Mensaje("Foto actualizada correctamente"), HttpStatus.OK);
        }
+     
+     @PostMapping("/recovery/{email}")
+     public ResponseEntity findByEmail(@PathVariable("email") String email){
+         if(!usuarioService.existsByEmail(email))
+            return new ResponseEntity(new Mensaje("Email no registrado en la base de datos"), HttpStatus.NOT_FOUND);
+         Usuario usuario = usuarioService.getByEmail(email).get();
+         String contraseñaTemp = DecodificarPass.generatePassword(6);
+         usuario.setPassword(passwordEncoder.encode(contraseñaTemp));
+         usuarioService.save(usuario);
+        
+         
+  // Enviar el correo electrónico con el enlace para restablecer la contraseña
+    
+    String emailBody = ("Hola " + usuario.getNombre() + " " + "Esta es tu contraseña temporal: " + " " + contraseñaTemp + " " + "/// Deberas cambiarla una vez ingresado "
+            + " " + " " + "Recuerda que tu usuario es: " + usuario.getNombreUsuario());
+    
+    SimpleMailMessage mailMessage = new SimpleMailMessage();
+    mailMessage.setTo(usuario.getEmail());
+    mailMessage.setSubject("App Crossbox Restablecimiento de contraseña");
+    mailMessage.setText(emailBody);
+    
+    javaMailSender.send(mailMessage);
+    return new ResponseEntity(new Mensaje("Email de recuperacion enviado"), HttpStatus.OK);
+    }
      
 }
 
