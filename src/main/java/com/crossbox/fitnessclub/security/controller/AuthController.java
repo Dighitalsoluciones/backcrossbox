@@ -321,7 +321,7 @@ public class AuthController {
         return new ResponseEntity(new Mensaje("Foto actualizada correctamente"), HttpStatus.OK);
        }
      
-     @PostMapping("/recovery/{email}")
+     @GetMapping("/recovery/{email}")
      public ResponseEntity findByEmail(@PathVariable("email") String email){
          if(!usuarioService.existsByEmail(email))
             return new ResponseEntity(new Mensaje("Email no registrado en la base de datos"), HttpStatus.NOT_FOUND);
