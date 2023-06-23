@@ -18,13 +18,14 @@ public class TurnoDTO {
   private String dni;
   private String telefono;
   private String nombreUsuario; 
+  private Long id_actividad;
   
   //constructor
 
     public TurnoDTO() {
     }
 
-    public TurnoDTO(String actividad, String dia, String horario, String nombre, String apellido, String dni, String telefono, String nombreUsuario) {
+    public TurnoDTO(String actividad, String dia, String horario, String nombre, String apellido, String dni, String telefono, String nombreUsuario, Long id_actividad) {
         this.actividad = actividad;
         this.dia = dia;
         this.horario = horario;
@@ -33,6 +34,9 @@ public class TurnoDTO {
         this.dni = dni;
         this.telefono = telefono;
         this.nombreUsuario = nombreUsuario;
+        this.id_actividad = id_actividad;
     }
+
+    
   
 }

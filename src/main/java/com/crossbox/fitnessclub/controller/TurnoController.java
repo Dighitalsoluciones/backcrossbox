@@ -72,7 +72,7 @@ public class TurnoController {
 
         Turno turno = new Turno(
             turnoDto.getActividad(), turnoDto.getDia(), turnoDto.getHorario(),turnoDto.getNombre(),turnoDto.getApellido(),
-            turnoDto.getDni(),turnoDto.getTelefono(),turnoDto.getNombreUsuario());
+            turnoDto.getDni(),turnoDto.getTelefono(),turnoDto.getNombreUsuario(),turnoDto.getId_actividad());
         turnoService.save(turno);
         return new ResponseEntity(new Mensaje("Nuevo turno creado exitosamente"), HttpStatus.OK);
     }
