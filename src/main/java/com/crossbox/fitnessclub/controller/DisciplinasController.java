@@ -3,9 +3,14 @@ package com.crossbox.fitnessclub.controller;
 
 import com.crossbox.fitnessclub.dto.dtoDisciplinas;
 import com.crossbox.fitnessclub.entity.Disciplinas;
+import com.crossbox.fitnessclub.entity.Imagen;
 import com.crossbox.fitnessclub.security.controller.Mensaje;
+import com.crossbox.fitnessclub.security.service.CloudinaryService;
+import com.crossbox.fitnessclub.service.ImagenService;
 import com.crossbox.fitnessclub.service.ServDisciplinas;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +32,13 @@ public class DisciplinasController {
     
     @Autowired()
     ServDisciplinas sDisciplinas;
+    
+    @Autowired()
+    CloudinaryService cloudinaryService;
+    
+    @Autowired()
+    ImagenService imagenService;
+    
     
     @GetMapping("/lista")
     public ResponseEntity<List<Disciplinas>> list() {
@@ -55,7 +67,7 @@ public class DisciplinasController {
 
     
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody dtoDisciplinas dtodisciplinas) {
+    public ResponseEntity<?> create(@RequestBody dtoDisciplinas dtodisciplinas) throws IOException {
         if (StringUtils.isBlank(dtodisciplinas.getNombre())) {
             return new ResponseEntity(new Mensaje("Campo Obligatorio"), HttpStatus.BAD_REQUEST);
         }
@@ -70,7 +82,18 @@ public class DisciplinasController {
         }
 
         Disciplinas disciplinas = new Disciplinas(
-                dtodisciplinas.getNombre(), dtodisciplinas.getDescripcion(), dtodisciplinas.getImagen(), dtodisciplinas.getProfesor());
+                dtodisciplinas.getNombre(), dtodisciplinas.getDescripcion(), dtodisciplinas.getImagen(), dtodisciplinas.getProfesor(),
+                dtodisciplinas.getIdImagenCloudinary(), dtodisciplinas.getIdImagen());
+        
+        Map result = cloudinaryService.uploading(dtodisciplinas.getImagen());
+       
+        Imagen imagen = new Imagen((String) result.get("original_filename"), (String) result.get("url"), (String) result.get("public_id"));
+        imagenService.save(imagen);
+       
+       disciplinas.setImagen((String) result.get("url"));
+       disciplinas.setIdImagenCloudinary((String) result.get("public_id"));
+       disciplinas.setIdImagen(imagen.getId());
+        
         sDisciplinas.save(disciplinas);
         return new ResponseEntity(new Mensaje("Nueva disciplina creada exitosamente"), HttpStatus.OK);
     }
