@@ -7,13 +7,11 @@ import com.crossbox.fitnessclub.entity.ActividadMapper;
 import com.crossbox.fitnessclub.repository.ActividadRepository;
 import com.crossbox.fitnessclub.security.controller.Mensaje;
 import com.crossbox.fitnessclub.service.ActividadService;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,7 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/actividades")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://crossboxfitnessclub1.web.app")
 public class ActividadesController {
   @Autowired
   private ActividadRepository actividadRepository;

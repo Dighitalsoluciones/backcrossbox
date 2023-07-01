@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/turnos")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://crossboxfitnessclub1.web.app")
 public class TurnoController {
     
   @Autowired

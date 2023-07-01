@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/cloudinary")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://crossboxfitnessclub1.web.app")
 public class CloudinaryController {
     
     @Autowired
